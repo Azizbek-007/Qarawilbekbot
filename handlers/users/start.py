@@ -5,7 +5,10 @@ from utils.db_api import DBS
 from keyboards.inline import start_btn
 from datetime import datetime
 import pytz
+
+
 @dp.message_handler(CommandStart())
+@dp.throttled(rate=1)
 async def bot_start(msg: types.Message):
     DBS.register_user(DBS, user=msg.from_id, username=msg.from_user.username,
         first_name=msg.from_user.first_name, last_name=msg.from_user.last_name)
