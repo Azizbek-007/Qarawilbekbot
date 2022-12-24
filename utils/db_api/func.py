@@ -63,13 +63,23 @@ class DBS:
         self.post_sql_query(lang_query)
 
     def group_count(self):
-        query = "SELECT COUNT(*) Groups"
+        query = "SELECT COUNT(*) FROM Groups"
         data = self.post_sql_query(query)
         return data[0][0]
     
     def user_count(self):
-        query = "SELECT COUNT(*) USERS"
+        query = "SELECT COUNT(*) FROM USERS"
         data = self.post_sql_query(query)
         return data[0][0]
+    
+    def user_list(self):
+        query = "SELECT * FROM USERS"
+        data = self.post_sql_query(query)
+        return data
+    
+    def group_list(self):
+        query = "SELECT * FROM Groups"
+        data = self.post_sql_query(query)
+        return data
 
 DBS.create_tables(DBS)

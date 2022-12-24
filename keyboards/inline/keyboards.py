@@ -5,3 +5,17 @@ def start_btn(bot_username):
             InlineKeyboardButton(text="Есабат", callback_data="esabat")).add(
             InlineKeyboardButton(text="Ботты группаға қосыў", url=f"https://t.me/{bot_username}?startgroup=new")
             )
+
+admin_btn = InlineKeyboardMarkup().add(
+                InlineKeyboardButton(text="userslerge xabar jiberiw", callback_data="sendUsers")).add(
+                InlineKeyboardButton(text="Grouppalarga xabar jiberiw", callback_data="sendGroup")
+            ).add(
+                InlineKeyboardButton(text="Grouppalar", callback_data="group_list")
+            )
+def send_types(_type): 
+    return InlineKeyboardMarkup().add(
+                InlineKeyboardButton(text="Send Message", callback_data=f"SendMessage={_type}")).add(
+                InlineKeyboardButton(text="Send Forward", callback_data=f"SendForward={_type}")).add(
+                InlineKeyboardButton("cancel", callback_data='cancel'))
+
+cencel_btn = InlineKeyboardMarkup().add(InlineKeyboardButton("cancel", callback_data='cancel'))
