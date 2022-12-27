@@ -19,3 +19,8 @@ def send_types(_type):
                 InlineKeyboardButton("cancel", callback_data='cancel'))
 
 cencel_btn = InlineKeyboardMarkup().add(InlineKeyboardButton("cancel", callback_data='cancel'))
+
+def pagination_btn(_min, _max):
+    return InlineKeyboardMarkup().add(
+            InlineKeyboardButton("◀️", callback_data=f"back={_min}={_max}"),
+            InlineKeyboardButton("▶️", callback_data=f"next={_min}={_max}"))
