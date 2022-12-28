@@ -6,6 +6,9 @@ from states import StateSendMessage
 from utils.db_api import DBS
 import asyncio
 
+# @dp.message_handler(content_types='sticker')
+# async def get_file_id(msg: types.Message):
+#     print(msg)
 
 @dp.message_handler(commands=['admin', 'panel'], chat_type=[types.ChatType.PRIVATE])
 async def hello_admin(msg: types.Message):
@@ -24,6 +27,7 @@ async def bot_add_del_bad_text(msg: types.Message):
 @dp.callback_query_handler(text="update_baza")
 async def bot_update_baza(call: types.CallbackQuery):
     await call.answer("Loading...", True)
+    await call.message.answer_sticker('CAACAgIAAxkBAAIU8mOskvpONtqSOQp2GPwFSwrx4yQtAAJLAgACVp29CmJQRdBQ-nGcLAQ')
     data = DBS.all_group_list(DBS)
     for x in data:
         try:
@@ -38,7 +42,7 @@ async def bot_update_baza(call: types.CallbackQuery):
             DBS.set_user_status(DBS, 1, y[0])
         except: 
             DBS.set_user_status(DBS, 0, y[0])
-    await call.message.answer("Database successfuly Updated 🥳")
+    await call.message.answer("<b>Database successfuly Updated</b> 🥳")
     
 @dp.callback_query_handler(text="cancel")
 async def bot_cancel(call: types.CallbackQuery, state: FSMContext):
@@ -138,7 +142,7 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
     if data['_type'] == 'SendMessage':
         if data['msg'] == 'User':
             await msg.answer("Jiberilip atir...")
-            for x in DBS.user_list(DBS):
+            for x in DBS._user_list(DBS):
                 try:
                     await msg.copy_to(x[0])
                     s +=1
@@ -148,7 +152,7 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
             await msg.answer(f"Jiberildi: {s}\nJiberilmedi: {n}")
         elif data['msg'] == 'Group':
             await msg.answer("Jiberilip atir...")
-            for x in DBS.all_group_list(DBS):
+            for x in DBS._all_group_list(DBS):
                 try:
                     await asyncio.sleep(.07)
                     await msg.copy_to(x[3], reply_markup=msg.reply_markup)
@@ -159,7 +163,7 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
     elif data["_type"] == 'SendForward':
         if data['msg'] == 'User':
             await msg.answer("Jiberilip atir...")
-            for x in DBS.user_list(DBS):
+            for x in DBS._user_list(DBS):
                 try:
                     await asyncio.sleep(.07)
                     await msg.forward(chat_id=x[0])
@@ -169,7 +173,7 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
 
         elif data['msg'] == 'Group':
             await msg.answer("Jiberilip atir...")
-            for x in DBS.all_group_list(DBS):
+            for x in DBS._all_group_list(DBS):
                 try:
                     await asyncio.sleep(.07)
                     await msg.forward(chat_id=x[3])

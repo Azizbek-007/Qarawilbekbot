@@ -74,6 +74,11 @@ class DBS:
         return data[0][0]
     
     def user_list(self):
+        query = "SELECT * FROM USERS"
+        data = self.post_sql_query(query)
+        return data
+    
+    def _user_list(self):
         query = "SELECT * FROM USERS WHERE active=1"
         data = self.post_sql_query(query)
         return data
@@ -85,6 +90,11 @@ class DBS:
     
     def all_group_list(self):
         query = F"SELECT * FROM Groups WHERE active=1"
+        data = self.post_sql_query(query)
+        return data
+    
+    def _all_group_list(self):
+        query = F"SELECT * FROM Groups"
         data = self.post_sql_query(query)
         return data
     
