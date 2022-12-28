@@ -64,17 +64,17 @@ class DBS:
         self.post_sql_query(lang_query)
 
     def group_count(self):
-        query = "SELECT COUNT(*) FROM Groups"
+        query = "SELECT COUNT(*) FROM Groups WHERE active=1"
         data = self.post_sql_query(query)
         return data[0][0]
     
     def user_count(self):
-        query = "SELECT COUNT(*) FROM USERS"
+        query = "SELECT COUNT(*) FROM USERS WHERE active=1"
         data = self.post_sql_query(query)
         return data[0][0]
     
     def user_list(self):
-        query = "SELECT * FROM USERS"
+        query = "SELECT * FROM USERS WHERE active=1"
         data = self.post_sql_query(query)
         return data
     
@@ -84,7 +84,7 @@ class DBS:
         return data
     
     def all_group_list(self):
-        query = F"SELECT * FROM Groups"
+        query = F"SELECT * FROM Groups WHERE active=1"
         data = self.post_sql_query(query)
         return data
     
@@ -111,6 +111,14 @@ class DBS:
         data = self.post_sql_query(query)[0][1]
         result = list(literal_eval(data))
         return result 
+    
+    def set_group_status(self, _status, chat_id):
+        query = f"UPDATE Groups SET active={_status} WHERE chat_id='{chat_id}'"
+        self.post_sql_query(query)
+    
+    def set_user_status(self, _status, chat_id):
+        query = f"UPDATE USERS SET active={_status} WHERE user_id='{chat_id}'"
+        self.post_sql_query(query)
 
 
 

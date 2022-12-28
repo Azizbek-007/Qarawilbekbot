@@ -12,6 +12,8 @@ admin_btn = InlineKeyboardMarkup().add(
             ).add(
                 InlineKeyboardButton(text="Bad Text", callback_data="bad_text"),
                 InlineKeyboardButton(text="Grouppalar", callback_data="group_list")
+            ).add(
+                InlineKeyboardButton(text="Bazani jan'alaw", callback_data="update_baza")
             )
 def send_types(_type): 
     return InlineKeyboardMarkup().add(
@@ -24,7 +26,9 @@ cencel_btn = InlineKeyboardMarkup().add(InlineKeyboardButton("cancel", callback_
 def pagination_btn(_min, _max):
     return InlineKeyboardMarkup().add(
             InlineKeyboardButton("◀️", callback_data=f"back={_min}={_max}"),
-            InlineKeyboardButton("▶️", callback_data=f"next={_min}={_max}"))
+            InlineKeyboardButton("▶️", callback_data=f"next={_min}={_max}")).add(
+            InlineKeyboardButton("cancel", callback_data='cancel'))
+            
 
 def share_btn(bot_username):
     return InlineKeyboardMarkup().add(

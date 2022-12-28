@@ -20,6 +20,25 @@ async def bot_add_del_bad_text(msg: types.Message):
     else:
         DBS.del_bad_text(DBS, text)
         await msg.reply(f"<b>{text}</b> so'zi o'shirildi")
+
+@dp.callback_query_handler(text="update_baza")
+async def bot_update_baza(call: types.CallbackQuery):
+    await call.answer("Loading...", True)
+    data = DBS.all_group_list(DBS)
+    for x in data:
+        try:
+            await dp.bot.get_chat(x[3])
+            DBS.set_group_status(DBS, 1, x[3])
+        except: 
+            DBS.set_group_status(DBS, 0, x[3])
+
+    for y in DBS.user_list(DBS):
+        try:
+            await dp.bot.get_chat(y[0])
+            DBS.set_user_status(DBS, 1, y[0])
+        except: 
+            DBS.set_user_status(DBS, 0, y[0])
+    await call.message.answer("Database successfuly Updated 🥳")
     
 @dp.callback_query_handler(text="cancel")
 async def bot_cancel(call: types.CallbackQuery, state: FSMContext):
