@@ -4,6 +4,7 @@ from time import ctime
 from datetime import datetime
 from xlsxwriter.workbook import Workbook
 import pytz
+from ast import literal_eval
 
 class DBS:
     def post_sql_query(sql_query):
@@ -86,5 +87,15 @@ class DBS:
         query = F"SELECT * FROM Groups"
         data = self.post_sql_query(query)
         return data
+    
+    def add_bad_text(slef, text):
+        query  = f"SELECT * FROM setting WHERE id=1"
+        data = slef.post_sql_query(query)[0][1]
+        real_data = list(literal_eval(data))
+        if text not in real_data:
+            real_data.append(text)
+            query2 = f'UPDATE setting SET bad_text = "{real_data}" WHERE id=1'
+            slef.post_sql_query(query2)
+
 
 
