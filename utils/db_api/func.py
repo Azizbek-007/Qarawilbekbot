@@ -81,5 +81,10 @@ class DBS:
         query = F"SELECT * FROM Groups WHERE id BETWEEN {_MIN} AND {_MAX}"
         data = self.post_sql_query(query)
         return data
+    
+    def all_group_list(self):
+        query = F"SELECT * FROM Groups"
+        data = self.post_sql_query(query)
+        return data
 
 

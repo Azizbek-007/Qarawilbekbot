@@ -6,6 +6,7 @@ from states import StateSendMessage
 from utils.db_api import DBS
 import asyncio
 
+
 @dp.message_handler(commands=['admin', 'panel'], chat_type=[types.ChatType.PRIVATE])
 async def hello_admin(msg: types.Message):
     await msg.answer("Hello Adimin", reply_markup=admin_btn)
@@ -51,7 +52,7 @@ async def bot_group_list(call: types.CallbackQuery):
         group_id = x[3]
         _count = await dp.bot.get_chat_member_count(group_id)
         group_data = await dp.bot.get_chat(group_id)
-        text += f"<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+        text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
     await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 @dp.callback_query_handler(lambda call: 'back=' in call.data)
@@ -69,7 +70,7 @@ async def back_pagination(call: types.CallbackQuery):
             group_id = x[3]
             _count = await dp.bot.get_chat_member_count(group_id)
             group_data = await dp.bot.get_chat(group_id)
-            text += f"<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
         await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 
@@ -87,7 +88,7 @@ async def next_pagination(call: types.CallbackQuery):
             group_id = x[3]
             _count = await dp.bot.get_chat_member_count(group_id)
             group_data = await dp.bot.get_chat(group_id)
-            text += f"<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
         await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 @dp.message_handler(state=StateSendMessage.promis, content_types=types.ContentTypes.ANY)
@@ -108,7 +109,7 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
             await msg.answer(f"Jiberildi: {s}\nJiberilmedi: {n}")
         elif data['msg'] == 'Group':
             await msg.answer("Jiberilip atir...")
-            for x in DBS.group_list(DBS):
+            for x in DBS.all_group_list(DBS):
                 try:
                     await asyncio.sleep(.07)
                     await msg.copy_to(x[3], reply_markup=msg.reply_markup)
@@ -128,7 +129,8 @@ async def send_all_message_bot(msg: types.Message, state: FSMContext):
             await msg.answer(f"Jiberildi: {s}\nJiberilmedi: {n}")
 
         elif data['msg'] == 'Group':
-            for x in DBS.group_list(DBS):
+            await msg.answer("Jiberilip atir...")
+            for x in DBS.all_group_list(DBS):
                 try:
                     await asyncio.sleep(.07)
                     await msg.forward(chat_id=x[3])

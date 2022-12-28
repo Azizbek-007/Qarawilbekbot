@@ -3,9 +3,10 @@ from loader import dp, bot_id
 from filters import IsAdmin
 from utils.db_api import DBS
 
-@dp.message_handler(IsAdmin(), content_types=types.ContentTypes.NEW_CHAT_MEMBERS, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
-async def bot_new_chat_member(msg: types.Message):
-    await msg.delete()
+
+# @dp.message_handler(IsAdmin(), content_types=types.ContentTypes., chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
+# async def bot_new_chat_member(msg: types.Message):
+#     await msg.delete()
 
 @dp.message_handler(content_types=types.ContentTypes.NEW_CHAT_MEMBERS, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def bot_new_chat_member_(msg: types.Message):

@@ -8,14 +8,12 @@ async def bot_ention(msg: types.Message):
     status_list = ['administrator', 'creator']
     if get_chat.status not in status_list:
         link_list = ['mention', 'url', 'text_link', 'text_mention']
-        try:
-            entity = msg.entities[0].type
-            if entity in link_list:
+        for x in msg.entities:
+            if x.type in link_list:
                 await msg.delete()
-        except:
-            try:
-                entity_caption = msg.caption_entities[0].type
-                if entity_caption in link_list:
+        else:
+            for x in msg.caption_entities:
+                if x.type in link_list:
                     await msg.delete()
-            except: pass
+        
     
