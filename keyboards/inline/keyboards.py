@@ -10,6 +10,7 @@ admin_btn = InlineKeyboardMarkup().add(
                 InlineKeyboardButton(text="userslerge xabar jiberiw", callback_data="sendUsers")).add(
                 InlineKeyboardButton(text="Grouppalarga xabar jiberiw", callback_data="sendGroup")
             ).add(
+                InlineKeyboardButton(text="Bad Text", callback_data="bad_text"),
                 InlineKeyboardButton(text="Grouppalar", callback_data="group_list")
             )
 def send_types(_type): 
@@ -24,3 +25,8 @@ def pagination_btn(_min, _max):
     return InlineKeyboardMarkup().add(
             InlineKeyboardButton("◀️", callback_data=f"back={_min}={_max}"),
             InlineKeyboardButton("▶️", callback_data=f"next={_min}={_max}"))
+
+def share_btn(bot_username):
+    return InlineKeyboardMarkup().add(
+        InlineKeyboardButton("Группаға қосыў", url=f"https://t.me/{bot_username}?startgroup=new")
+    )

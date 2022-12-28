@@ -97,5 +97,20 @@ class DBS:
             query2 = f'UPDATE setting SET bad_text = "{real_data}" WHERE id=1'
             slef.post_sql_query(query2)
 
+    def del_bad_text(slef, text):
+        query  = f"SELECT * FROM setting WHERE id=1"
+        data = slef.post_sql_query(query)[0][1]
+        real_data = list(literal_eval(data))
+        if text in real_data:
+            real_data.remove(text)
+            query2 = f'UPDATE setting SET bad_text = "{real_data}" WHERE id=1'
+            slef.post_sql_query(query2)
+        
+    def bad_text_list(self):
+        query = "SELECT * FROM setting where id=1"
+        data = self.post_sql_query(query)[0][1]
+        result = list(literal_eval(data))
+        return result 
+
 
 

@@ -11,11 +11,25 @@ import asyncio
 async def hello_admin(msg: types.Message):
     await msg.answer("Hello Adimin", reply_markup=admin_btn)
 
+@dp.message_handler(lambda msg: msg.text.startswith("/add=") or msg.text.startswith("/del="), chat_type=[types.ChatType.PRIVATE])
+async def bot_add_del_bad_text(msg: types.Message):
+    text = msg.text.split('=')[1]
+    if msg.text.startswith("/add="):
+        DBS.add_bad_text(DBS, text)
+        await msg.answer(f"<b>{text}</b> so'zi qosildi")
+    else:
+        DBS.del_bad_text(DBS, text)
+        await msg.reply(f"<b>{text}</b> so'zi o'shirildi")
+    
 @dp.callback_query_handler(text="cancel")
 async def bot_cancel(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await call.message.delete()
     await call.message.answer("Hello Adimin", reply_markup=admin_btn)
+
+@dp.callback_query_handler(text="bad_text")
+async def bot_add_bad_text(call: types.CallbackQuery):
+    await call.answer("So'z qosiw: \n/add=xyz\n\nSo'zdi o'shiriw\n/del=xyz", True)
 
 @dp.callback_query_handler(text="sendUsers")
 async def bot_send_message_users(call: types.CallbackQuery):
@@ -50,9 +64,11 @@ async def bot_group_list(call: types.CallbackQuery):
     data = DBS.group_list(DBS, 0, 10)
     for x in data:
         group_id = x[3]
-        _count = await dp.bot.get_chat_member_count(group_id)
-        group_data = await dp.bot.get_chat(group_id)
-        text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+        try:
+            _count = await dp.bot.get_chat_member_count(group_id)
+            group_data = await dp.bot.get_chat(group_id)
+            text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+        except: pass
     await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 @dp.callback_query_handler(lambda call: 'back=' in call.data)
@@ -68,9 +84,11 @@ async def back_pagination(call: types.CallbackQuery):
         text = ""
         for x in data:
             group_id = x[3]
-            _count = await dp.bot.get_chat_member_count(group_id)
-            group_data = await dp.bot.get_chat(group_id)
-            text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            try:
+                _count = await dp.bot.get_chat_member_count(group_id)
+                group_data = await dp.bot.get_chat(group_id)
+                text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            except: pass
         await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 
@@ -86,9 +104,11 @@ async def next_pagination(call: types.CallbackQuery):
         text = ""
         for x in data:
             group_id = x[3]
-            _count = await dp.bot.get_chat_member_count(group_id)
-            group_data = await dp.bot.get_chat(group_id)
-            text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            try:
+                _count = await dp.bot.get_chat_member_count(group_id)
+                group_data = await dp.bot.get_chat(group_id)
+                text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
+            except:pass
         await call.message.answer(text, reply_markup=pagination_btn(0, 10))
 
 @dp.message_handler(state=StateSendMessage.promis, content_types=types.ContentTypes.ANY)
