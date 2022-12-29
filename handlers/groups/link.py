@@ -3,13 +3,14 @@ from loader import dp
 from filters import IsAdmin
 from keyboards.inline import share_btn
 from aiogram.utils.exceptions import Throttled
+from filters import  IsBadText
 from utils.db_api import DBS
 
-@dp.message_handler(lambda msg: msg.text in DBS.bad_text_list(DBS), content_types=['text'])
+@dp.message_handler(IsBadText(), content_types=['text'], chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def bot_delete_bad_text(msg: types.Message):
     await msg.delete()
     get_me = await dp.bot.get_me()
-    try:
+    try: 
         await dp.throttle(key='*', rate=10)
         await msg.answer(f"<a href='tg://user?id={msg.from_id}'>{msg.from_user.full_name}</a> <b>сөгинбең!</b>", reply_markup=share_btn(get_me.username))
     except Throttled: pass

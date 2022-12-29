@@ -14,6 +14,8 @@ admin_btn = InlineKeyboardMarkup().add(
                 InlineKeyboardButton(text="Grouppalar", callback_data="group_list")
             ).add(
                 InlineKeyboardButton(text="Bazani jan'alaw", callback_data="update_baza")
+            ).add(
+                InlineKeyboardButton("Gruppaga xabar jiberiw", callback_data="send_message_group")
             )
 def send_types(_type): 
     return InlineKeyboardMarkup().add(

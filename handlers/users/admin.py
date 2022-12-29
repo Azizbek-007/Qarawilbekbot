@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from loader import dp
 from keyboards.inline import admin_btn, send_types, cencel_btn, pagination_btn
-from states import StateSendMessage
+from states import StateSendMessage, StateSendMessageGroup
 from utils.db_api import DBS
 import asyncio
 
@@ -43,6 +43,33 @@ async def bot_update_baza(call: types.CallbackQuery):
         except: 
             DBS.set_user_status(DBS, 0, y[0])
     await call.message.answer("<b>Database successfuly Updated</b> 🥳")
+
+@dp.callback_query_handler(text="send_message_group")
+async def bot_send_message_to_group(call: types.CallbackQuery):
+    await StateSendMessageGroup.promis.set()
+    await call.message.delete()
+    await call.message.answer("Gruppa idsin jiberin':", reply_markup=cencel_btn)
+
+@dp.message_handler(regexp="^[-][0-9]+", state=StateSendMessageGroup.promis)
+async def get_group_id(msg: types.Message, state: FSMContext):
+    await state.finish()
+    await state.update_data(chat_id=msg.text)
+    await StateSendMessageGroup.msg.set()
+    await msg.answer("Xabar jiberin'", reply_markup=cencel_btn)
+
+@dp.message_handler(state=StateSendMessageGroup.promis)
+async def dont_get_group_id(msg: types.Message, state: FSMContext):
+    await msg.reply("Gruppa idisin qate kiritin'iz. Qayta kiritin'!")
+
+@dp.message_handler(state=StateSendMessageGroup.msg, content_types=[types.ContentType.ANY])
+async def send_msg_toGroup(msg: types.Message, state: FSMContext):
+    try:
+        get_data = await state.get_data()
+        print(get_data['chat_id'])
+        await msg.copy_to(get_data['chat_id'])
+        await state.finish()
+        await msg.reply("Xabar Jiberildi")
+    except:  await msg.reply("Xabar jiberilmedi")
     
 @dp.callback_query_handler(text="cancel")
 async def bot_cancel(call: types.CallbackQuery, state: FSMContext):

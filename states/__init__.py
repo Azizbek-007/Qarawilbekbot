@@ -1,1 +1,1 @@
-from .states import StateSendMessage
+from .states import StateSendMessage, StateSendMessageGroup
