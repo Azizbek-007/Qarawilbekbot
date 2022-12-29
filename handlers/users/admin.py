@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from loader import dp
+from loader import dp, admin_list
 from keyboards.inline import admin_btn, send_types, cencel_btn, pagination_btn
 from states import StateSendMessage, StateSendMessageGroup
 from utils.db_api import DBS
@@ -10,11 +10,11 @@ import asyncio
 # async def get_file_id(msg: types.Message):
 #     print(msg)
 
-@dp.message_handler(commands=['admin', 'panel'], chat_type=[types.ChatType.PRIVATE])
+@dp.message_handler(commands=['admin', 'panel'], chat_type=[types.ChatType.PRIVATE], user_id=admin_list)
 async def hello_admin(msg: types.Message):
     await msg.answer("Hello Adimin", reply_markup=admin_btn)
 
-@dp.message_handler(lambda msg: msg.text.startswith("/add=") or msg.text.startswith("/del="), chat_type=[types.ChatType.PRIVATE])
+@dp.message_handler(lambda msg: msg.text.startswith("/add=") or msg.text.startswith("/del="), chat_type=[types.ChatType.PRIVATE], user_id=admin_list)
 async def bot_add_del_bad_text(msg: types.Message):
     text = msg.text.split('=')[1]
     if msg.text.startswith("/add="):
@@ -111,7 +111,7 @@ async def bot_send_forward(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(text="group_list")
 async def bot_group_list(call: types.CallbackQuery):
     text = ""
-    data = DBS.group_list(DBS, 0, 10)
+    data = DBS.group_list(DBS, 0, 30)
     for x in data:
         group_id = x[3]
         try:
@@ -119,7 +119,7 @@ async def bot_group_list(call: types.CallbackQuery):
             group_data = await dp.bot.get_chat(group_id)
             text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
         except: pass
-    await call.message.answer(text, reply_markup=pagination_btn(0, 10))
+    await call.message.answer(text, reply_markup=pagination_btn(0, 10), disable_web_page_preview=True)
 
 @dp.callback_query_handler(lambda call: 'back=' in call.data)
 async def back_pagination(call: types.CallbackQuery):
@@ -139,7 +139,7 @@ async def back_pagination(call: types.CallbackQuery):
                 group_data = await dp.bot.get_chat(group_id)
                 text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
             except: pass
-        await call.message.answer(text, reply_markup=pagination_btn(0, 10))
+        await call.message.answer(text, reply_markup=pagination_btn(0, 10), disable_web_page_preview=True)
 
 
 
@@ -159,7 +159,7 @@ async def next_pagination(call: types.CallbackQuery):
                 group_data = await dp.bot.get_chat(group_id)
                 text += f"<b>Group:</b> {group_data.title}\n<b>Group id:</b> {x[3]}\n<b>Group user:</b> {group_data.invite_link}\n<b>Group members:</b> {_count}\n\n"
             except:pass
-        await call.message.answer(text, reply_markup=pagination_btn(0, 10))
+        await call.message.answer(text, reply_markup=pagination_btn(0, 10), disable_web_page_preview=True)
 
 @dp.message_handler(state=StateSendMessage.promis, content_types=types.ContentTypes.ANY)
 async def send_all_message_bot(msg: types.Message, state: FSMContext):
