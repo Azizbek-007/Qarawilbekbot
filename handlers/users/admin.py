@@ -28,15 +28,16 @@ async def bot_add_del_bad_text(msg: types.Message):
 async def bot_update_baza(call: types.CallbackQuery):
     await call.answer("Loading...", True)
     await call.message.answer_sticker('CAACAgIAAxkBAAIU8mOskvpONtqSOQp2GPwFSwrx4yQtAAJLAgACVp29CmJQRdBQ-nGcLAQ')
-    data = DBS.all_group_list(DBS)
+    data = DBS._all_group_list(DBS)
     for x in data:
         try:
             await dp.bot.get_chat(x[3])
             DBS.set_group_status(DBS, 1, x[3])
+
         except: 
             DBS.set_group_status(DBS, 0, x[3])
 
-    for y in DBS.user_list(DBS):
+    for y in DBS._user_list(DBS):
         try:
             await dp.bot.get_chat(y[0])
             DBS.set_user_status(DBS, 1, y[0])
