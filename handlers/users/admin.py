@@ -71,7 +71,7 @@ async def send_msg_toGroup(msg: types.Message, state: FSMContext):
         await msg.reply("Xabar Jiberildi")
     except:  await msg.reply("Xabar jiberilmedi")
     
-@dp.callback_query_handler(text="cancel")
+@dp.callback_query_handler(text="cancel", state="*")
 async def bot_cancel(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await call.message.delete()
