@@ -24,6 +24,7 @@ async def bot_add_del_bad_text(msg: types.Message):
         DBS.del_bad_text(DBS, text)
         await msg.reply(f"<b>{text}</b> so'zi o'shirildi")
 
+
 @dp.callback_query_handler(text="update_baza")
 async def bot_update_baza(call: types.CallbackQuery):
     await call.answer("Loading...", True)
